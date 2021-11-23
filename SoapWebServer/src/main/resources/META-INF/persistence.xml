@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+  <persistence-unit name="ec.edu.espe.arquitectura_producto_jar_1PU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <properties>
+      <property name="eclipselink.jdbc.url" value="jdbc:mysql://localhost:3306/ejemplo_soap?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
+      <property name="eclipselink.jdbc.user" value="root"/>
+      <property name="eclipselink.jdbc.password" value=""/>
+      <property name="eclipselink.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+    </properties>
+  </persistence-unit>
+</persistence>
