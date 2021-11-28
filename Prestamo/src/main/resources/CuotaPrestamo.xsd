@@ -1,0 +1,56 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://espe.edu.ec/arqsoftware/prestamo/zamora_zuniga/ws"
+           targetNamespace="http://espe.edu.ec/arqsoftware/prestamo/zamora_zuniga/ws" elementFormDefault="qualified">
+
+    <xs:element name="obtenerPrestamoIdRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="codigoPrestamo" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="obtenerPrestamoIdResponse" >
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="cuotaPrestamoRS" type="tns:cuotaPrestamoRS" minOccurs="0" maxOccurs="unbounded" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="obtenerPrestamoIdYEstadoRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="codigoPrestamo" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="obtenerPrestamoIdYEstadoResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="cuotaPrestamoRS" type="tns:cuotaPrestamoRS" minOccurs="0" maxOccurs="unbounded" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    
+    <xs:complexType name="cuotaPrestamoRS">
+        <xs:sequence>
+            <xs:element name="codigo" type="xs:int"/>
+            <xs:element name="codigoPrestamo" type="xs:int"/>
+            <xs:element name="anio" type="xs:int"/>
+            <xs:element name="mes" type="xs:int"/>
+            <xs:element name="cuota" type="xs:decimal"/>
+            <xs:element name="cuotaInteres" type="xs:decimal" />
+            <xs:element name="cuotaSeguro" type="xs:decimal" />
+            <xs:element name="capital" type="xs:decimal" />
+            <xs:element name="saldoAnterior" type="xs:decimal" />
+            <xs:element name="saldoActual" type="xs:decimal" />
+            <xs:element name="estado" type="xs:string" />
+            <xs:element name="fechaMaxPago" type="xs:dateTime" />
+            <xs:element name="fechaPago" type="xs:dateTime" />
+            <xs:element name="valorPago" type="xs:decimal" />               
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>
