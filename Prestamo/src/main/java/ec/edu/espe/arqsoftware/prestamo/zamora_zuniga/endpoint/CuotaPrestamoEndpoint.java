@@ -17,7 +17,12 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 import ec.edu.espe.arqsoftware.prestamo.zamora_zuniga.model.CuotaPrestamo;
 import ec.edu.espe.arqsoftware.prestamo.zamora_zuniga.transform.CuotaPrestamoRSTransform;
 import ec.edu.espe.arqsoftware.prestamo.zamora_zuniga.ws.CuotaPrestamoRS;
+import ec.edu.espe.arqsoftware.prestamo.zamora_zuniga.ws.ObtenerPrestamoIdYEstadoRequest;
+import ec.edu.espe.arqsoftware.prestamo.zamora_zuniga.ws.ObtenerPrestamoIdYEstadoResponse;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.datatype.DatatypeConfigurationException;
 
 /**
  *
@@ -37,41 +42,49 @@ public class CuotaPrestamoEndpoint {
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "obtenerPrestamoIdRequest")
     @ResponsePayload
-    public ObtenerPrestamoIdResponse obtenerPrestamoId(@RequestPayload ObtenerPrestamoIdRequest request) throws RuntimeException{
+    public ObtenerPrestamoIdResponse obtenerPrestamoId(@RequestPayload ObtenerPrestamoIdRequest request) throws RuntimeException {
         try {
             List<CuotaPrestamo> cuotaPrestamo = this.cuotaService.listarPorPrestamoId(request.getCodigoPrestamo());
             List<CuotaPrestamoRS> cuotaPrestamoRS = new ArrayList<>();
             log.info("Cuotas obtenidas {} con el codigo: {}",
-            cuotaPrestamo.size(),  request.getCodigoPrestamo());
+                    cuotaPrestamo.size(), request.getCodigoPrestamo());
             cuotaPrestamo.forEach(c -> {
-                cuotaPrestamoRS.add(CuotaPrestamoRSTransform.buildCuotaPrestamoRS(c));
-            });            
+                try {
+                    cuotaPrestamoRS.add(CuotaPrestamoRSTransform.buildCuotaPrestamoRS(c));
+                } catch (DatatypeConfigurationException ex) {
+                    Logger.getLogger(CuotaPrestamoEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
             ObtenerPrestamoIdResponse response = new ObtenerPrestamoIdResponse();
             response.setCuotaPrestamoRS(cuotaPrestamoRS);
             return response;
         } catch (Exception e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e.getMessage());
         }
     }
 
-   
-    /*
-    @GetMapping(value = "cuotaPrestamo/{codigoPrestamo}")
-    public ResponseEntity obtenerPrestamoIdYEstado(@PathVariable("codigoPrestamo") Integer codigoPrestamo) {
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "obtenerPrestamoIdYEstadoRequest")
+    @ResponsePayload
+    public ObtenerPrestamoIdYEstadoResponse obtenerPrestamoIdYEstado(@RequestPayload ObtenerPrestamoIdYEstadoRequest request) throws RuntimeException {
         try {
-            List<CuotaPrestamo> cuotaPrestamo = this.cuotaService.listarPorPrestamoIdYEstado(codigoPrestamo);
+            List<CuotaPrestamo> cuotaPrestamo = this.cuotaService.listarPorPrestamoIdYEstado(request.getCodigoPrestamo());
             List<CuotaPrestamoRS> cuotaPrestamoRS = new ArrayList<>();
             log.info("Cuotas obtenidas {} con el codigo: {}",
-                    cuotaPrestamo.size(), codigoPrestamo);
+                    cuotaPrestamo.size(), request.getCodigoPrestamo());
             cuotaPrestamo.forEach(c -> {
-                cuotaPrestamoRS.add(CuotaPrestamoRSTransform.buildCuotaPrestamoRS(c));
+                try {
+                    cuotaPrestamoRS.add(CuotaPrestamoRSTransform.buildCuotaPrestamoRS(c));
+                } catch (DatatypeConfigurationException ex) {
+                    Logger.getLogger(CuotaPrestamoEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+                }
             });
-
-            return ResponseEntity.ok(cuotaPrestamoRS);
+            ObtenerPrestamoIdYEstadoResponse response = new ObtenerPrestamoIdYEstadoResponse();
+            response.setCuotaPrestamoRS(cuotaPrestamoRS);
+            return response;
         } catch (Exception e) {
-            return Serializador.Error(e, "Error, no se pudieron obtener las cuotas con ese código de préstamo y ese estado");
+            log.info(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
-*/
 
 }
